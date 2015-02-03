@@ -68,6 +68,7 @@ class DNN(object):
             # construct the hidden layer
             if i == 0:
                 input_size = self.n_ins
+                print(input_size)
                 layer_input = self.x
                 print(layer_input)
                 print(layer_input.imag.size)

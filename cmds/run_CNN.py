@@ -56,14 +56,23 @@ if __name__ == '__main__':
     cfg.parse_config_cnn(arguments, '10:' + nnet_spec, conv_nnet_spec)
     cfg.init_data_reading(train_data_spec, valid_data_spec)
 
+    if arguments.has_key('replicate'):
+        cfg.replicate = int(arguments['replicate'])
+
     # parse pre-training options
     # pre-training files and layer number (how many layers are set to the pre-training parameters)
     ptr_layer_number = 0; ptr_file = ''
     if arguments.has_key('ptr_file') and arguments.has_key('ptr_layer_number'):
         ptr_file = arguments['ptr_file']
-        ptr_layer_number = int(arguments['ptr_layer_number'])
+        temp = arguments['ptr_layer_number'].split(':')
+        
+        if len(temp) > 1 or len(temp[0].split(',')) > 1:
+            ptr_layer_number = [map(int, i.split(',')) for i in temp]
+        else:
+            ptr_layer_number = int(temp[0])
 
     # check working dir to see whether it's resuming training
+    
     resume_training = False
     if os.path.exists(wdir + '/nnet.tmp') and os.path.exists(wdir + '/training_state.tmp'):
         resume_training = True
@@ -77,6 +86,7 @@ if __name__ == '__main__':
     cnn = CNN(numpy_rng=numpy_rng, theano_rng = theano_rng, cfg = cfg)
     # load the pre-training networks, if any, for parameter initialization
     if (ptr_layer_number > 0) and (resume_training is False):
+        print (type(ptr_layer_number))
         _file2nnet(cnn.layers, set_layer_num = ptr_layer_number, filename = ptr_file)
     if resume_training:
         _file2nnet(cnn.layers, filename = wdir + '/nnet.tmp')

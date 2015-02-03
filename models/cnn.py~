@@ -94,6 +94,7 @@ class CNN(object):
 
         self.conv_output_dim = config['output_shape'][1] * config['output_shape'][2] * config['output_shape'][3]
         cfg.n_ins = config['output_shape'][1] * config['output_shape'][2] * config['output_shape'][3] * self.replicate
+        print(cfg.n_ins)
         dnn_input = [e.output for e in self.layers[-1]]
         dnn_input = T.concatenate(dnn_input, axis=1)
         self.fc_dnn = DNN(numpy_rng=numpy_rng, theano_rng = theano_rng, cfg = self.cfg, input = dnn_input)

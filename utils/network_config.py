@@ -59,7 +59,10 @@ class NetworkConfig():
         self.test_sets = None
         self.test_xy = None
         self.test_x = None
-        self.test_y = None 
+        self.test_y = None
+
+        # number of parallel convolutional networks
+        self.replicate = 1
 
         # specifically for DNN
         self.n_ins = 0
